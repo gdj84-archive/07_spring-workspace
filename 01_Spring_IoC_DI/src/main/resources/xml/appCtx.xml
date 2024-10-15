@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 	
 	<!-- 
@@ -46,10 +47,31 @@
 		student1.setCalc(calculator);
 	-->
 
+	<!-- Namespace로 p 추가하면 property 태그 대신 p:필드명 속성으로 값 주입 가능 -->
+	<bean class="com.br.spring.ioc.xml.Student" id="student2" 
+				p:name="김말똥" 
+				p:academy="구디아카데미"
+				p:classColor="파랑색"
+				p:calc-ref="calculator" />
 
+	<!-- 
+		* constructor Injection 예시 
+		  <constructor-arg> : 생성된 객체의 필드에 매개변수 생성자를 이용하여 값을 주입할 때 사용되는 태그
+		    - value : 담고자하는 값
+		    - ref   : 레퍼런스 타입의 값
+	-->
+	<bean class="com.br.spring.ioc.xml.Student" id="student3">
+		<constructor-arg value="강개순" />
+		<constructor-arg value="구디아카데미" />
+		<constructor-arg value="초록색" />
+		<constructor-arg ref="calculator" />
+	</bean>
+	<!-- 
+		내부적으로 아래와 같은 코드가 실행됨
+		Student student3 = new Student("강개순", "구디아카데미", "초록색", calculator);
+	-->
 
-
-
+	<bean class="com.br.spring.ioc.xml.StudentDao" id="studentDao" /> <!-- scope="singleton" 기본값 -->
 
 
 

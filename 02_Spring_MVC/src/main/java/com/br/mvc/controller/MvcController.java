@@ -69,7 +69,28 @@ public class MvcController {
 	public String welcomePage() {
 		System.out.println("MvcController클래스의 welcomePage 메소드 작동됨");
 		return "main";
+		/*
+		 * 반환값은 사실상 DispatcherServlet의 ViewResolver에 전달됨 
+		 * 이때 반환값 앞(prefix)에 "/WEB-INF/views/" 가 붙고
+		 * 			   뒤(suffix)에 ".jsp" 가 붙으면서 응답뷰 경로가 완성됨 
+		 * 
+		 * 기본적으로 포워딩으로 인식되서 포워딩처리까지 자동으로 진행됨 
+		 * 
+		 * 만일 redirect 하고싶다면 반환 문자열의 앞에 redirect: 붙여주면됨
+		 * 즉, return "redirect:url경로"; 
+		 */
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

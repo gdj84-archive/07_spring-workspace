@@ -18,8 +18,14 @@
 		  HandlerMapping과 HandlerAdapter 를 자동으로 bean으로 등록해줌
 	-->
 
-	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
+	
 	<resources mapping="/resources/**" location="/resources/" />
+	<resources mapping="/assets/**" location="/assets/" />
+	<!-- 
+		* <resources>
+		- 정적인 자원(이미지,오디오,비디오,css,js 등)들을 관리하는 디렉토리의 경로를 설정해두는 태그
+		- 여러개 작성 가능
+	-->
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">

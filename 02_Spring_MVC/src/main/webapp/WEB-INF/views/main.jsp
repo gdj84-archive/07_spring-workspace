@@ -36,8 +36,27 @@
 	<hr>
 	
 	<h3>3. 요청시 전달되는 파라미터 처리하는 연습 (request의 parameter)</h3>
+	
 	<!-- HttpServletRequest 방법 -->
 	<a href="${ contextPath }/member/detail.do?no=1">회원상세조회</a>
+	<br><br>
+	<form action="${ contextPath }/member/enroll1.do" method="post">
+		이름 : <input type="text" name="name"> <br>
+		나이 : <input type="text" name="age"> <br>
+		주소 : <input type="text" name="address"> <br>
+		<button type="submit">등록</button>
+	</form>
+	<br><br>
+	
+	<!-- @RequestParam 방법 -->
+	<a href="${ contextPath }/member/detail2.do?no=1">회원상세조회</a>
+	<br><br>
+	<form action="${ contextPath }/member/enroll2.do" method="post">
+		이름 : <input type="text" name="name"> <br>
+		나이 : <input type="text" name="age"> <br>
+		주소 : <input type="text" name="address"> <br>
+		<button type="submit">등록</button>
+	</form>
 	
 	
 	

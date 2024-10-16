@@ -10,5 +10,14 @@
 </head>
 <body>
 
+	<h3>도서 상세 페이지</h3>
+	<div>
+		번호 : 1 <br>
+		제목 : 수학의 정석 <br>
+		저자 : 나수학 <br><br>
+		
+		<a href="${ contextPath }/book/modifyForm.do">수정하기 페이지로 이동</a>
+	</div>
+
 </body>
 </html>

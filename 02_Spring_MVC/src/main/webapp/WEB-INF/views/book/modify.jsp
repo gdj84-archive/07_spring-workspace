@@ -10,5 +10,14 @@
 </head>
 <body>
 
+	<h3>도서 수정 페이지</h3>
+	
+	<form action="${ contextPath }/book/modify.do" method="post">
+		제목 : <input type="text" name="title" value="수학의 정석"> <br>
+		저자 : <input type="text" name="author" value="나수학"> <br><br>
+		
+		<button type="submit">수정</button>
+	</form>	
+
 </body>
 </html>

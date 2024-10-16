@@ -3,13 +3,10 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee https://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
-	<!-- The definition of the Root Spring Container shared by all Servlets and Filters -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>/WEB-INF/spring/root-context.xml</param-value>
 	</context-param>
-	
-	<!-- Creates the Spring Container shared by all Servlets and Filters -->
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
@@ -24,10 +21,19 @@
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
-		
 	<servlet-mapping>
 		<servlet-name>appServlet</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
+	
+	<!-- 
+		* <servlet> + <servlet-mapping>
+		  어떠한 url로 요청하든 스프링에서 제공하는 DispatcherServlet이 작동되도록 mapping되어있음 
+		  이때 servlet-context.xml 파일을 읽어들이면서 DispatcherServlet 객체가 생성됨 
+		  
+		  즉, 요청과 관련된 설정 및 빈 등록은 servlet-context.xml인 
+		  Spring Bean Configuration File에 작성하면됨
+		
+	-->
 
 </web-app>

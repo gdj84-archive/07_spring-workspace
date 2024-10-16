@@ -9,6 +9,13 @@
 <title>Insert title here</title>
 </head>
 <body>
-
+	<h3>도서 등록 페이지</h3>
+	
+	<form action="${ contextPath }/book/enroll.do" method="post">
+		제목 : <input type="text" name="title"> <br>
+		저자 : <input type="text" name="author"> <br><br>
+		
+		<button type="submit">등록</button>
+	</form>
 </body>
 </html>

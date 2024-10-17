@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.br.mvc.dto.NoticeDto;
 import com.br.mvc.service.NoticeService;
@@ -64,7 +65,6 @@ public class NoticeController {
 	 *    requestScope 영역에 데이터를 맵형식(key-value)로 담을 수 있는 객체 
 	 *    단, setAttribute가 아닌 addAttribute 메소드 이용 
 	 */
-	
 	@GetMapping("/list.do")
 	public String noticeList(Model model) {
 		List<NoticeDto> list = noticeService.selectNoticeList(); // 응답페이지에 필요한 데이터
@@ -73,10 +73,34 @@ public class NoticeController {
 		return "notice/list";
 	}
 	
+	/*
+	 * 2. ModelAndView 객체 이용하기
+	 *    Model과 View가 합쳐져있는 형태
+	 *    Model은 데이터를 담는 객체
+	 *    View는 응답뷰에 대한 정보를 담는 객체
+	 *    
+	 *    ModelAndView 객체에 데이터와 응답뷰에 대해 담고 해당 객체를 반환 
+	 */
+	@GetMapping("/detail.do")
+	public ModelAndView noticeDetail(int no, ModelAndView mv) {
+		//NoticeDto n = noticeService.selectNoticeByNo(no); // 응답페이지에 필요한 데이터 
+		//return "notice/detail"; // 응답뷰
+		
+		//mv.addObject("notice", noticeService.selectNoticeByNo(no));
+		//mv.setViewName("notice/detail");
+		
+		mv.addObject("notice", noticeService.selectNoticeByNo(no))
+		  .setViewName("notice/detail");
+		
+		return mv;
+	}
 	
 	
-	
-	
+	/*
+	 * 										   @Controller	 @Service @Repository
+	 * view ---request---> DispatcherServlet => Controller => Service => Dao (쿼리실행)
+	 *      <--response--    ViewResolver    <= 데이터,뷰  <=  결과   <= 결과
+	 */
 	
 	
 	

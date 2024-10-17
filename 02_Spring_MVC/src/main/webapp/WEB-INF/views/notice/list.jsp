@@ -23,7 +23,7 @@
 			<c:forEach var="n" items="${ list }">
 				<tr>
 					<td>${ n.no }</td>
-					<td>${ n.title }</td>
+					<td><a href="${ contextPath }/notice/detail.do?no=${ n.no }">${ n.title }</a></td>
 					<td>${ n.content }</td>
 				</tr>
 			</c:forEach>

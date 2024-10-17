@@ -3,8 +3,11 @@ package com.br.mvc.dao;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import com.br.mvc.dto.NoticeDto;
 
+@Repository // dao 역할을 하는 클래스에 부여하는 component 어노테이션 (빈 스캐닝에 의해 빈등록됨)
 public class NoticeDao {
 	
 	private List<NoticeDto> dbList = Arrays.asList(

@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.br.mvc.dto.MemberDto;
+
 @RequestMapping("/member")
 @Controller
 public class MemberController {
@@ -72,10 +74,26 @@ public class MemberController {
 		System.out.println("나이: " + age);
 		System.out.println("주소: " + addr);
 		
+		MemberDto mem = new MemberDto();
+		mem.setName(name);
+		mem.setAge(age);
+		mem.setAddr(addr);
+		
+		System.out.println(mem);
+		
 		return "main";
 	}
 	
-	
+	/*
+	 * 3. 커맨드 객체 방법
+	 */
+	@PostMapping("/enroll3.do")
+	public String memberEnroll3(MemberDto mem) {
+		
+		System.out.println(mem);
+		
+		return "main";
+	}
 	
 	
 	

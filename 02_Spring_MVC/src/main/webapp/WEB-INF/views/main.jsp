@@ -57,7 +57,15 @@
 		주소 : <input type="text" name="address"> <br>
 		<button type="submit">등록</button>
 	</form>
+	<br><br>
 	
+	<!-- 커맨드 객체 방법 -->
+	<form action="${ contextPath }/member/enroll3.do" method="post">
+		이름 : <input type="text" name="name"> <br>
+		나이 : <input type="text" name="age"> <br>
+		주소 : <input type="text" name="addr"> <br>
+		<button type="submit">등록</button>
+	</form>
 	
 	
 	

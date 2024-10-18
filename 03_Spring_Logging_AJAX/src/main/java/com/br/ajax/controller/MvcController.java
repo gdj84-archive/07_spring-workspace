@@ -17,6 +17,11 @@ public class MvcController {
 		// 출력문은 성능저하를 야기시킴 => 로그 출력 권장
 		//System.out.println("MvcController의 mainPage 메소드 작동됨"); 
 		
+		logger.trace("trace msg");
+		logger.debug("debug msg");
+		logger.info("info msg");
+		logger.warn("warn msg");
+		logger.error("error msg");
 		
 		
 		

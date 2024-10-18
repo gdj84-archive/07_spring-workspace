@@ -48,6 +48,24 @@
 		</encoder>
 	</appender>
 	
+	<appender class="ch.qos.logback.core.FileAppender" name="fileLog">
+		<file>/logs/ajax.log</file>
+		<append>true</append>
+		<immediateFlush>true</immediateFlush>
+		<encoder>
+			<pattern>%-5level: [%date{yyyy-MM-dd HH:mm:ss}] [%logger:%line] - %msg%n</pattern>
+		</encoder>
+	</appender>
+	
+	<!-- 특정 조건을 넘어서면 새로운 파일로 로깅 -->
+	<appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="rollingFileLog">
+		<!-- rollingPolicy : 어떤 조건으로 파일을 생성 또는 사라지게 할건지 보관정책 -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+		
+		</rollingPolicy>
+		
+	</appender>
+	
 	
 	<!-- 
 		* <root>
@@ -65,15 +83,32 @@
 		  </root>
 		
 		* <logger>
-		
+		- "특정 패키지안"의 "특정 레벨 이상" 로그를 "특정 appender"에 적용시켜 출력
+		- 작성방법
+		  <logger name="특정패키지" level="로그레벨" [additivity="root logger로 전달여부(기본값 true)"]>
+		  	[<appender-ref ref="로그를 출력시킬 appender 이름"/>]
+		  </logger>
+		  
+		* 기본적으로 logger 먼저 반영되고 root logger가 반영됨
 	-->
 	
 	<!-- 1) root logger 만으로 모든 클래스 내의 로그 출력되도록 -->
+	<!-- 
 	<root level="DEBUG">
 		<appender-ref ref="consoleLog"/>
 	</root>
+	-->
 	
+	<!-- 2) logger 태그로 특정 패키지를 따로 레벨 지정 -->
+	<logger name="org.springframework" level="INFO">
+		<appender-ref ref="consoleLog" />
+		<appender-ref ref="fileLog" />
+	</logger>
 	
+	<logger name="com.br.ajax" level="DEBUG">
+		<appender-ref ref="consoleLog" />
+		<appender-ref ref="fileLog" />
+	</logger>
 	
 	
 	

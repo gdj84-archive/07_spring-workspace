@@ -10,5 +10,7 @@ public interface NoticeService {
 	List<NoticeDto> selectNoticeList();
 	// 상세조회
 	NoticeDto selectNoticeByNo(int noticeNo);
+	// 수정
+	int updateNotice(NoticeDto n);
 	
 }

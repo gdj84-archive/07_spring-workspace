@@ -27,5 +27,17 @@ public class NoticeDao {
 		}
 		return null;
 	}
+	
+	public int updateNotice(NoticeDto n) {
+		for(NoticeDto notice : dbList) {
+			if(notice.getNo() == n.getNo()) {
+				notice.setTitle(n.getTitle());
+				notice.setContent(n.getContent());
+				return 1;
+			}
+		}
+		
+		return 0;
+	}
 
 }

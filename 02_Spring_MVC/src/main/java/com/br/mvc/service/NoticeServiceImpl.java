@@ -25,4 +25,9 @@ public class NoticeServiceImpl implements NoticeService {
 		return noticeDao.selectNoticeByNo(noticeNo);
 	}
 
+	@Override
+	public int updateNotice(NoticeDto n) {
+		return noticeDao.updateNotice(n);
+	}
+
 }

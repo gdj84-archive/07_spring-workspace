@@ -5,8 +5,10 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.br.mvc.dto.NoticeDto;
 import com.br.mvc.service.NoticeService;
@@ -101,6 +103,69 @@ public class NoticeController {
 	 * view ---request---> DispatcherServlet => Controller => Service => Dao (쿼리실행)
 	 *      <--response--    ViewResolver    <= 데이터,뷰  <=  결과   <= 결과
 	 */
+	
+	@RequestMapping("/modifyForm.do")
+	public String noticeModifyForm(int no, Model model) {
+		NoticeDto notice = noticeService.selectNoticeByNo(no);
+		model.addAttribute("notice", notice);
+		return "notice/modifyForm";
+	}
+	
+	// ========= redirect시 그때 포워딩 되는 페이지에 필요한 데이터 담는 방법 ======
+	/*
+	 * Model 영역은 requestScope 기 때문에 당장 포워딩되는 jsp에서만 사용 가능함 
+	 * 즉, redirect로 다른 controller 가 실행되는 순간 현재 만들어진 Model은 소멸됨
+	 * 
+	 *   case 1)   
+	 *   			Model1 생성              Model1 유지
+	 *   			controller ------------> 포워딩 jsp
+	 *   						  포워딩
+	 *   
+	 *   
+	 *   
+	 *   case 2) 	
+	 *   			Model1 생성 Model1소멸   Model2 생성             Model2 유지
+	 *   			controller ------------> controller -----------> 포워딩 jsp
+	 *   				|		 redirect 		 |		   포워딩		 |
+	 *   				|						 |						 |
+	 *   			/update.do				 /detail.do 			 /notice/detail.jsp
+	 *   
+	 *   case 3)
+	 *   		RedirectAttributes 생성 						RedirectAttributes 유지
+	 *   			controller ------------> controller ----------->  포워딩 jsp
+	 *    						 redirect				   포워딩
+	 * 
+	 * 		즉, 현재 controller에서 url 재요청을 통해 다른 controller에 의해 포워딩되는 jsp에서까지
+	 * 		데이터를 쭉 사용하고 싶을 경우 
+	 * 		Model 객체가 아닌 RedirectAttributes 객체에 "addFlashAttribute" 메소드로 담으면 됨 
+	 * 		addAttribute 담게되면 Model에 담는거랑 동일한 맥락
+	 */
+	
+	
+	@PostMapping("/update.do")
+	public String noticeUpdate(NoticeDto n, /*Model model*/ RedirectAttributes ra) { // 1) 요청시 전달값 처리
+		
+		// 2) 요청처리를 위한 서비스 호출
+		int result = noticeService.updateNotice(n);
+		
+		// 3) 응답
+		if(result > 0) {
+			//model.addAttribute("alertMsg", "성공적으로 수정되었습니다.");
+			ra.addFlashAttribute("alertMsg", "성공적으로 수정되었습니다.");
+			return "redirect:/notice/detail.do?no=" + n.getNo();
+		}else {
+			return "redirect:/";
+		}
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

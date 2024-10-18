@@ -10,6 +10,12 @@
 </head>
 <body>
 
+	<c:if test="${ not empty alertMsg }">
+		<script>
+			alert('${alertMsg}');
+		</script>
+	</c:if>
+
 	<h3>공지사항 상세 페이지</h3>
 	
 	<c:choose>
@@ -40,6 +46,7 @@
 					 ㄴ dao측도 만들기 (이때 그냥 1로 반환되도록 하기)
 					 ㄴ 성공했을 경우 상세페이지로 다시 이동될수있도록 하기	 				
 			-->
+			<a href="${contextPath}/notice/modifyForm.do?no=${notice.no}">수정페이지로 이동</a>
 		</c:otherwise>
 	</c:choose>
 

@@ -7,6 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script src="${contextPath}/resources/js/jquery-3.7.1.min.js"></script>
 </head>
 <body>
 	<h3>회원관리 1번 페이지</h3>
@@ -17,7 +18,7 @@
 		아이디 : <input type="text" name="userId"> <br>
 		비밀번호 : <input type="text" name="userPwd"> <br>
 		
-		<button type="button" onclick="">조회1(아이디, 비번으로 이름 조회)</button>
+		<button type="button" onclick="fn_ajax1();">조회1(아이디, 비번으로 이름 조회)</button>
 		<button type="button" onclick="">조회2(아이디, 비번으로 이름 조회)</button>
 		<button type="button" onclick="">조회3(번호로 회원전체정보 조회)</button>
 		<button type="button" onclick="">전체조회</button>
@@ -34,6 +35,30 @@
 		결과가 보여지는 영역
 	</div>
 	
+	<script>
+		// 조회1버튼 : 아이디랑 비번으로 이름 조회
+		function fn_ajax1(){
+			
+			let id = $("input[name=userId]").val();
+			let pwd = $("input[name=userPwd]").val();
+			
+			$.ajax({
+				// 요청
+				url: '${contextPath}/member1/detail1.do',
+				data: 'id=' + id + "&pwd=" + pwd, // 쿼리스트링으로 전달값 작성
+				type: 'get',
+				// 응답
+				success: function(resData){
+					$('#result').text(resData);
+				},
+				error: function(){
+					console.log("조회1 버튼에 대한 ajax 통신 실패");
+				}
+			})
+			
+			
+		}
+	</script>
 	
 	
 	

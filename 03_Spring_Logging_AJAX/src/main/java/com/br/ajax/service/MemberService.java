@@ -1,5 +1,7 @@
 package com.br.ajax.service;
 
+import java.util.List;
+
 import com.br.ajax.dto.MemberDto;
 
 public interface MemberService {

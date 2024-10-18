@@ -9,11 +9,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-
-	<h3>메인페이지 입니다</h3>
-	
-	<a href="${contextPath}/member/manage1.do">회원관리1</a> <br>
-	<a href="${contextPath}/member/manage2.do">회원관리2</a>
+	<h3>회원관리 2번 페이지</h3>
 
 </body>
 </html>

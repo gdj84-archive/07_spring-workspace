@@ -41,14 +41,19 @@ public class MemberController1 {
 	 */
 	@ResponseBody
 	@GetMapping(value="/detail1.do", produces="text/html; charset=utf-8")
-	public String memberDetail(String id, String pwd)  {
+	public String memberDetail1(String id, String pwd)  {
 		logger.debug("request id: {}, pwd: {}", id, pwd);
 		String result = memService.selectMemberByIdPwd(id, pwd); // 홍길동
 		
 		return result;
 	}
 	
-	
+	@ResponseBody
+	@GetMapping(value="/detail2.do", produces="text/html; charset=utf-8")
+	public String memberDetail2(String userId, String userPwd) {
+		//String result = memService.selectMemberByIdPwd(userId, userPwd);
+		return memService.selectMemberByIdPwd(userId, userPwd);
+	}
 	
 	
 	

@@ -12,14 +12,14 @@
 <body>
 	<h3>회원관리 1번 페이지</h3>
 	
-	<form id="mem-form">
+	<form id="mem-form">  <!-- 해당 form요소.serialize() => "userNo=10&userId=user01&userPwd=pass01" -->
 		
 		번호 : <input type="text" name="userNo"> <br>
 		아이디 : <input type="text" name="userId"> <br>
 		비밀번호 : <input type="text" name="userPwd"> <br>
 		
 		<button type="button" onclick="fn_ajax1();">조회1(아이디, 비번으로 이름 조회)</button>
-		<button type="button" onclick="">조회2(아이디, 비번으로 이름 조회)</button>
+		<button type="button" onclick="fn_ajax2();">조회2(아이디, 비번으로 이름 조회)</button>
 		<button type="button" onclick="">조회3(번호로 회원전체정보 조회)</button>
 		<button type="button" onclick="">전체조회</button>
 		<br>
@@ -58,6 +58,24 @@
 			
 			
 		}
+	
+		function fn_ajax2(){
+			
+			$.ajax({
+				url: '${contextPath}/member1/detail2.do',
+				type: 'get',
+				data: $('#mem-form').serialize(), // form의 모든 입력요소들을 직렬화 (위와 같은 쿼리스트링으로 만들어짐)
+				success: function(resData){
+					$('#result').text(resData);
+				},
+				error: function(){
+					console.log('조회2 버튼에 대한 ajax 통신 실패');
+				}
+			})
+			
+		}
+	
+	
 	</script>
 	
 	

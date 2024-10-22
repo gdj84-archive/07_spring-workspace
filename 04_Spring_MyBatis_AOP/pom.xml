@@ -37,11 +37,18 @@
 			<version>${org.springframework-version}</version>
 		</dependency>
 				
-		<!-- AspectJ -->
+		<!-- * AspectJ (AOP를 위한 라이브러리) -->
 		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjrt</artifactId>
 			<version>${org.aspectj-version}</version>
+		</dependency>	
+		<!-- 위빙 : Advice(공통로직)를 PointCut(핵심로직)에 로딩되도록 함 -->
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>${org.aspectj-version}</version>
+			<scope>runtime</scope>
 		</dependency>	
 		
 		<!-- * Logging -->

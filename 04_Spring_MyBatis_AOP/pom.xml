@@ -44,18 +44,27 @@
 			<version>${org.aspectj-version}</version>
 		</dependency>	
 		
-		<!-- * Logging (logback) -->
+		<!-- * Logging -->
+		<!--   1) logback -->
 		<dependency>
 		    <groupId>ch.qos.logback</groupId>
 		    <artifactId>logback-classic</artifactId>
 		    <version>1.4.14</version>
 		    <!-- <scope>test</scope> 지워야됨 -->
 		</dependency>
+		<!--   2) slf4j -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>${org.slf4j-version}</version>
 		</dependency>
+		<!--   3) log4jdbc (https://log4jdbc.brunorozendo.com/) -->
+		<dependency>
+		    <groupId>org.bgee.log4jdbc-log4j2</groupId>
+		    <artifactId>log4jdbc-log4j2-jdbc4.1</artifactId>
+		    <version>1.16</version>
+		</dependency>
+				
  		
 		<!-- @Inject -->
 		<dependency>

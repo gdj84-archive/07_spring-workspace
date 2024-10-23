@@ -1,0 +1,23 @@
+	  * 이제 프로젝트 생성 후 세팅
+		
+		1. 인코딩필터 등록 : web.xml
+		2. 로그관련 문서 세팅 
+		   1) logback.xml 복사 후 base package 수정 
+		   2) log4jdbc properties 복사 
+		3. 계층형 패키지 생성
+		4. Dto 클래스 먼저 만들기
+		5. mybatis 관련 문서 세팅
+		   1) mappers 폴더 만들어서 *-mapper.xml 파일 만들기 (반드시 namespace 까지 지정해둘것)
+		   2) config 폴더 만들어서 mybatis-config.xml 파일 만들기 
+		      ㄴ setting 태그 작성
+		      ㄴ typeAlias로 Dto 클래스들 alias 등록해두기
+		      ㄴ mapper파일들 등록해두기 
+		6. DB관련 빈 등록, 트랜잭션 관련 구문 작성 : root-context.xml
+		   1) mybatis 사용을 위한 빈 3개 등록
+		   2) 트랜잭션 처리를 위한 aop 등록 (base package 수정) 
+		7. MVC 패턴의 클래스 만들기
+		   1) controller, service<I>, serviceImpl, dao 만들기
+		   2) controller, serviceImpl, dao 에 어노테이션 붙여서 빈등록하기
+		   3) 각 클래스마다 필요한 필드 추가해서 DI 진행시키기
+		8. Server Start 해보기 (오류안나야됨)
+	

@@ -24,11 +24,24 @@
 				const files = evt.target.files; // FileList {0:File, 1:File, ..}
 				console.log(files);
 				
+				let totalSize = 0;
+				
 				for(let i=0; i<files.length; i++){
-					if(files[i].size > 10 * 1024 * 1024){
+					
+					if(files[i].size > 10 * 1024 * 1024){ // 첨부파일 한개의 크기가 10MB 초과할 경우
 						alert("첨부파일의 최대 크기는 10MB입니다.");
 						evt.target.value = "";
+						return;
 					}
+					
+					totalSize += files[i].size;
+					
+					if(totalSize > 100 * 1024 * 1024){ 		// 전체 첨부파일 사이즈가 100MB 초과할 경우
+						alert("전체 첨부파일 최대 크기는 100MB입니다.");
+						evt.target.value = "";
+						return;
+					}
+					
 				}
 				
 			})
@@ -49,6 +62,16 @@
 	
 	
 	<h2>2. 다중 첨부파일 업로드 테스트</h2>
+	<form action="${ contextPath }/board/insert2.do" method="post" enctype="multipart/form-data">
+	
+		게시글 제목 : <input type="text" name="boardTitle"> <br>
+		게시글 내용 : <textarea name="boardContent"></textarea> <br>
+		첨부파일 : <input type="file" name="uploadFile" multiple> <br>
+		<label>각 첨부파일 사이즈는 10MB 이하, 총 100MB 이하여야 됩니다.</label> <br><br>
+		
+		<button type="submit">등록</button>
+	</form>
+	
 	
 	<h2>3. 비동기식으로 첨부파일 업로드 테스트</h2>
 	

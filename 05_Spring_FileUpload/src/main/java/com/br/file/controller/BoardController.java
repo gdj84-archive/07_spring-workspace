@@ -1,18 +1,18 @@
 package com.br.file.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.br.file.dto.AttachDto;
 import com.br.file.dto.BoardDto;
 import com.br.file.service.BoardService;
+import com.br.file.util.FileUtil;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 public class BoardController {
 	
 	private final BoardService boardService;
+	private final FileUtil fileUtil;
 	
 	@PostMapping("/insert1.do")
 	public String insertOneFileBoard(BoardDto board, MultipartFile uploadFile) {
@@ -31,43 +32,59 @@ public class BoardController {
 		log.debug("board: {}", board);
 		log.debug("attach: {}", uploadFile);
 		
+		AttachDto attach = null;
 		if(uploadFile != null && !uploadFile.isEmpty()) { // 첨부파일이 존재할 경우 => 업로드
+			
 			// 전달된 파일 업로드 처리 
-			// 1) 업로드할 폴더 (/upload/yyyyMMdd)
-			String filePath = "/upload/" + new SimpleDateFormat("yyyyMMdd").format(new Date());
+			// FileUtil 클래스의 fileupload 호출 (uploadFile넘기면서)
+			Map<String, String> map = fileUtil.fileupload(uploadFile);
 			
-			File filePathDir = new File(filePath);
-			if(!filePathDir.exists()) { // 해당 경로의 폴더가 존재하지 않을 경우
-				filePathDir.mkdirs();	// 해당 폴더 만들기
-			}
-			
-			// 2) 파일명 수정 작업
-			String originalFilename = uploadFile.getOriginalFilename(); // "xxxxx.jpg" | "xxxx.tar.gz"
-			String originalExt = originalFilename.endsWith(".tar.gz") ? ".tar.gz" 
-																	  : originalFilename.substring(originalFilename.lastIndexOf("."));
-			
-			// UUID.randomUUID().toString() : 랜덤값 발생 (32자리 + -4개)
-			String filesystemName = UUID.randomUUID().toString().replace("-", "") + originalExt;
-			
-			// 3) 업로드 (폴더에 파일 저장)
-			try {
-				uploadFile.transferTo(new File(filePathDir, filesystemName));
-			} catch (IllegalStateException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			// 4) db에 기록할 정보를 자바객체(AttachDto)에 세팅
+			attach = AttachDto.builder()
+							  .filePath(map.get("filePath"))
+							  .originalName(map.get("originalName"))
+							  .filesystemName(map.get("filesystemName"))
+							  .build();
 			
 		}
 		
+		int result = boardService.insertOneFileBoard(board, attach);
 		
-		
-		
-		
+		if(result > 0) {
+			log.debug("게시글 등록 성공");
+		}else {
+			log.debug("게시글 등록 실패");			
+		}
 		
 		return "redirect:/";
 	}
 
+	@PostMapping("/insert2.do")
+	public String insertManyFileBoard(BoardDto board, List<MultipartFile> uploadFile) {
+		
+		List<AttachDto> list = new ArrayList<>();
+		for(MultipartFile file : uploadFile) {
+			if(file != null && !file.isEmpty()) { // 파일이 존재할 경우
+				Map<String, String> map = fileUtil.fileupload(file);
+				list.add(AttachDto.builder()
+								  .filePath(map.get("filePath"))
+								  .originalName(map.get("originalName"))
+								  .filesystemName(map.get("filesystemName"))
+								  .build());
+			}
+		}
+		
+		int result = boardService.insertManyFileBoard(board, list);
+		
+		if(list.isEmpty() && result == 1 || !list.isEmpty() && result == list.size()) {
+			log.debug("다중 첨부파일 게시글 등록 성공");
+		}else {
+			log.debug("다중 첨부파일 게시글 등록 실패");
+		}
+		
+		
+		return "redirect:/";
+	}
 	
 	
 	

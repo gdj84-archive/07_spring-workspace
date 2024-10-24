@@ -3,6 +3,9 @@ package com.br.file.dao;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.br.file.dto.AttachDto;
+import com.br.file.dto.BoardDto;
+
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -10,5 +13,13 @@ import lombok.RequiredArgsConstructor;
 public class BoardDao {
 	
 	private final SqlSessionTemplate sqlSession;
+	
+	public int insertBoard(BoardDto board) {
+		return sqlSession.insert("boardMapper.insertBoard", board);
+	}
+	
+	public int insertAttach(AttachDto attach) {
+		return sqlSession.insert("boardMapper.insertAttach", attach);
+	}
 
 }

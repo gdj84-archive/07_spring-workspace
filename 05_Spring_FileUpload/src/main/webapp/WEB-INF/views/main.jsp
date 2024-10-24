@@ -72,8 +72,59 @@
 		<button type="submit">등록</button>
 	</form>
 	
-	
 	<h2>3. 비동기식으로 첨부파일 업로드 테스트</h2>
+	
+	<div id="async_test">
+		게시글 제목 : <input type="text" id="title"> <br>
+		게시글 내용 : <textarea id="content"></textarea> <br>
+		첨부파일 : <input type="file" id="file"> <br><br>
+		
+		<button type="button" id="submit">등록</button>
+	</div>
+	
+	<script>
+		$(function(){
+			
+			$("#submit").on("click", function(){
+				
+				// ajax 게시글 등록 (요청시 전달값 : 제목,내용,첨부파일)
+				// 첨부파일 전달해야될 경우 => FormData(가상의 form요소) 객체에 담아서 전달
+				let formData = new FormData(); 
+				formData.append("boardTitle", document.getElementById("title").value);
+				formData.append("boardContent", document.getElementById("content").value);
+				formData.append("uploadFile", document.getElementById("file").files[0]); // File객체 담기
+				
+				$.ajax({
+					url: '${contextPath}/board/ajaxInsert.do',
+					type: 'post',
+					data: formData,
+					processData: false, // processData : false 선언시 formData를 string으로 변환하지 않음
+					contentType: false, // contentType : false 선언시 multipart/form-data로 전송되게 함 
+					success: function(result){
+						if(result == "SUCCESS"){
+							alert("성공적으로 등록!");
+							location.reload();
+						}else{
+							alert("등록 실패!");
+						}
+					},
+					error: function(){
+						
+					}
+				})
+				
+				
+			})
+			
+		})
+	</script>
+	
+	
+	
+	
+	
+	
+	
 	
 	<h2>4. 첨부파일 목록 조회</h2>
 	

@@ -43,7 +43,7 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public List<AttachDto> selectAttachList() {
-		return null;
+		return boardDao.selectAttachList();
 	}
 
 }

@@ -112,11 +112,34 @@
 						
 					}
 				})
-				
-				
 			})
-			
 		})
+	</script>
+	
+	
+	<h2>4. 첨부파일 목록 조회</h2>
+	<button onclick="fn_selectAttachList();">첨부파일 조회</button>
+	
+	<div id="result"></div>
+	
+	<script>
+		function fn_selectAttachList(){
+			$.ajax({
+				url: '${contextPath}/board/atlist.do',
+				success: function(resData){
+					console.log(resData); // [{}, {}]
+					
+					let a = '';
+					for(let i=0; i<resData.length; i++){
+						a += '<a>' + resData[i].originalName + '</a><br>';
+					}
+					
+					$('#result').html(a);
+					
+					
+				}
+			})
+		}
 	</script>
 	
 	
@@ -126,7 +149,13 @@
 	
 	
 	
-	<h2>4. 첨부파일 목록 조회</h2>
+	
+	
+	
+	
+	
+	
+	
 	
 </body>
 </html>

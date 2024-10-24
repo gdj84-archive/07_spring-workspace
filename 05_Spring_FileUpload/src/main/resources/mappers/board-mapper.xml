@@ -2,6 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="boardMapper">
 
+	<resultMap id="attachResultMap" type="AttachDto">
+		<result column="file_no" property="fileNo" />
+		<result column="file_path" property="filePath" />
+		<result column="original_name" property="originalName" />
+		<result column="filesystem_name" property="filesystemName" />
+		<result column="ref_board_no" property="refBoardNo" />
+	</resultMap>
+
 	<insert id="insertBoard">
 		insert
 		  into board
@@ -38,6 +46,15 @@
 		  )
 	</insert>
 
+	<select id="selectAttachList" resultMap="attachResultMap">
+		select
+					 file_no				 
+				 , file_path			 
+				 , original_name	 
+				 , filesystem_name 
+				 , ref_board_no		
+		  from attachment
+	</select>
 
 
 

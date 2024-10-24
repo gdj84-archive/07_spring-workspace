@@ -11,6 +11,8 @@ import java.util.UUID;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.br.file.dto.AttachDto;
+
 @Component
 public class FileUtil {
 	
@@ -48,6 +50,7 @@ public class FileUtil {
 		map.put("filesystemName", filesystemName);
 		
 		return map;
+		
 		
 	}
 

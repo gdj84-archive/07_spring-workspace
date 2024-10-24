@@ -131,7 +131,7 @@
 					
 					let a = '';
 					for(let i=0; i<resData.length; i++){
-						a += '<a>' + resData[i].originalName + '</a><br>';
+						a += '<a href="${contextPath}' + resData[i].filePath + '/' + resData[i].filesystemName + '" download="' + resData[i].originalName + '">' + resData[i].originalName + '</a><br>';
 					}
 					
 					$('#result').html(a);
@@ -143,8 +143,39 @@
 	</script>
 	
 	
+	<hr>
 	
+	<h2>번외. 내용 작성란에 에디터 적용시키기</h2>
+	<p>
+		에디터 기능 사용시 내용 작성시 폰트 수정, 정렬, 이미지삽입 등등이 가능함 <br>
+		위의 과정들이 반영된 html 요소가 넘어감 => DB에 기록 <br>
+		
+		> 에디터 api : summernote, ckeditor, 등등
+	</p>
 	
+	<form action="" method="">
+		게시글 제목 : <input type="text"> <br>
+		게시글 내용 : <textarea id="summernote"></textarea> <br><br>
+		<button type="submit">등록</button>
+	</form>
+	
+	<!-- include libraries(jQuery, bootstrap) -->
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+	
+	<!-- include summernote css/js -->
+	<link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.js"></script>
+	<script>
+		$(document).ready(function() {
+		  $('#summernote').summernote({
+			  width: 512,
+			  height: 500,
+			  placeholder: 'hello world'
+		  });
+		});
+	</script>
 	
 	
 	

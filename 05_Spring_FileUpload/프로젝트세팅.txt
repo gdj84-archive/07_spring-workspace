@@ -1,5 +1,6 @@
 	  * 이제 프로젝트 생성 후 세팅
 		
+		0. 버전 및 라이브러리 등록 : pom.xml
 		1. 인코딩필터 등록 : web.xml
 		2. 로그관련 문서 세팅 
 		   1) logback.xml 복사 후 base package 수정 

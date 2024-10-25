@@ -9,6 +9,12 @@
 		<result column="filesystem_name" property="filesystemName" />
 		<result column="ref_board_no" property="refBoardNo" />
 	</resultMap>
+	
+	<resultMap id="boardResultMap" type="BoardDto">
+		<result column="board_no" property="boardNo" />
+		<result column="board_title" property="boardTitle" />
+		<result column="board_content" property="boardContent" />
+	</resultMap>
 
 	<insert id="insertBoard">
 		insert
@@ -45,7 +51,7 @@
 		  , seq_bno.currval
 		  )
 	</insert>
-
+	
 	<select id="selectAttachList" resultMap="attachResultMap">
 		select
 					 file_no				 
@@ -56,8 +62,33 @@
 		  from attachment
 	</select>
 
-
-
+	<!-- case1. resultMap을 따로 두지 않을 경우 -->
+	<!--  
+	<select id="selectBoard" resultType="BoardDto">
+		select
+		       board_no				as "boardNo"
+		     , board_title		as "boardTitle"
+		     , board_content  as "boardContent"
+		  from board
+		 where board_no = #{boardNo}
+	</select>
+	-->
+	
+	<!-- case2. resultMap을 따로 둬서 참조할 경우 -->
+	<resultMap id="boardResultMap" type="BoardDto">
+		<result column="board_no" property="boardNo" />
+		<result column="board_title" property="boardTitle" />
+		<result column="board_content" property="boardContent" />
+	</resultMap>
+	<select id="selectBoard" resultMap="boardResultMap">
+		select
+		       board_no
+		     , board_title
+		     , board_content
+		  from board
+		 where board_no = #{boardNo}
+	</select>
+	 
 
 
 

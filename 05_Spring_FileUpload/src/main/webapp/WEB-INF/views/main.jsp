@@ -153,9 +153,9 @@
 		> 에디터 api : summernote, ckeditor, 등등
 	</p>
 	
-	<form action="" method="">
-		게시글 제목 : <input type="text"> <br>
-		게시글 내용 : <textarea id="summernote"></textarea> <br><br>
+	<form action="${contextPath}/board/editor/insert.do" method="post">
+		게시글 제목 : <input type="text" name="boardTitle"> <br>
+		게시글 내용 : <textarea id="summernote" name="boardContent"></textarea> <br>
 		<button type="submit">등록</button>
 	</form>
 	
@@ -172,13 +172,64 @@
 		  $('#summernote').summernote({
 			  width: 512,
 			  height: 500,
-			  placeholder: 'hello world'
+			  placeholder: 'hello world',
+			  callbacks: {
+				  onImageUpload: function(images){
+					  
+					  // 비동기식으로 이미지 업로드 
+					  for(let i=0; i<images.length; i++){
+						  
+						  let formData = new FormData();
+						  formData.append('image', images[i]);
+						  
+						  $.ajax({
+							  url: '${contextPath}/board/editor/imageUpload.do',
+							  type: 'post',
+							  data: formData,
+							  processData: false,
+							  contentType: false,
+							  async: false,
+							  success: function(src){
+								  // 파일 업로드 후에 저장경로+저장파일명 을 응답데이터로 받아
+								  // 현재 에디터의 <img> 의 src 속성값을 응답데이터로 변경
+								  $("#summernote").summernote('insertImage', "${contextPath}" + src);
+								  
+							  }
+						  })
+						  
+					  }
+					  
+				  }
+			  }
 		  });
 		});
 	</script>
 	
+	<h2>번외. 에디터로 등록한 게시글 조회해보기</h2>
+	<form id="editor_search">
+		조회할 글번호 : <input type="text" name="boardNo"> 
+		<button type="button" onclick="fn_selectBoard();">검색</button>
+	</form>
 	
+	<h4>조회결과</h4>
 	
+	<b>제목 : </b> <span id="title-result"></span> <br>
+	<b>내용</b>
+	<div id="content-result"></div>
+	
+	<script>
+		function fn_selectBoard(){
+			$.ajax({
+				url: '${contextPath}/board/editor/detail.do',
+				type: 'get',
+				data: $('#editor_search').serialize(), // "boardNo=xx"
+				success: function(resData){ // {boardNo:xx, boardTitle:xx, boardContent:xx}
+					$('#title-result').text(resData.boardTitle);
+					$('#content-result').html(resData.boardContent);
+				}
+			})
+		}
+	</script>
 	
 	
 	

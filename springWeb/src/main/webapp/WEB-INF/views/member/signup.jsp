@@ -29,15 +29,15 @@
             <h2 class="m-4">회원가입</h2>
             <br>
 
-            <form action="" method="post" id="signup_form">
+            <form action="${ contextPath }/member/insert.do" method="post" id="signup_form">
                 <div class="form-group">
                     <label for="userId">* ID :</label>
-                    <input type="text" class="form-control" id="userId" name="" placeholder="Please Enter ID" required>
+                    <input type="text" class="form-control" id="userId" name="userId" placeholder="Please Enter ID" required>
                     <div id="idCheck_result" class="uncheck smallfont"></div>
                     <br>
                     
                     <label for="userPwd">* Password :</label>
-                    <input type="password" class="form-control" id="userPwd" name="" placeholder="Please Enter Password" required>
+                    <input type="password" class="form-control" id="userPwd" name="userPwd" placeholder="Please Enter Password" required>
                     <div id="pwdCheck_result" class="uncheck smallfont"></div>
                     <br>
                     
@@ -47,23 +47,23 @@
                     <br>
                     
                     <label for="userName">* Name :</label>
-                    <input type="text" class="form-control" id="userName" name="" placeholder="Please Enter Name" required>
+                    <input type="text" class="form-control" id="userName" name="userName" placeholder="Please Enter Name" required>
                     <div id="nameCheck_result" class="uncheck smallfont"></div>
                     <br>
                     
                     <label for="email"> &nbsp; Email :</label>
-                    <input type="email" class="form-control" id="email" name="" placeholder="Please Enter Email"><br>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Please Enter Email"><br>
                     
                     <label for="phone"> &nbsp; Phone :</label>
-                    <input type="tel" class="form-control" id="phone" name="" placeholder="Please Enter Phone (-포함)"><br>
+                    <input type="tel" class="form-control" id="phone" name="phone" placeholder="Please Enter Phone (-포함)"><br>
                     
                     <label for="address"> &nbsp; Address :</label>
-                    <input type="text" class="form-control" id="address" name="" placeholder="Please Enter Address"><br>
+                    <input type="text" class="form-control" id="address" name="address" placeholder="Please Enter Address"><br>
                     
                     <label for=""> &nbsp; Gender : </label> &nbsp;&nbsp;
-                    <input type="radio" name="" id="Male" value="M">
+                    <input type="radio" name="gender" id="Male" value="M">
                     <label for="Male">남자</label> &nbsp;&nbsp;
-                    <input type="radio" name="" id="Female" value="F">
+                    <input type="radio" name="gender" id="Female" value="F">
                     <label for="Female">여자</label><br>
                     
                 </div>
@@ -122,7 +122,32 @@
             		// 아이디 유효성검사
             		$("#signup_form #userId").on("keyup", function(){
             			
-            		})
+            			let regExp = /^[a-z\d]{5,12}$/;
+            			
+            			idResult = noValueCheck( $(this), $("#idCheck_result") )
+            											&& regExpCheck( $(this), $("#idCheck_result")
+            																						 , regExp, "사용가능한 아이디입니다."
+            																						 				 , "영문, 숫자 포함 5~12자리로 작성해주세요");
+            			
+            			if(idResult){
+            				$.ajax({
+            					url: '${contextPath}/member/idcheck.do',
+            					async: false,
+            					data: "checkId=" + $(this).val(),
+            					success: function(resData){
+            						if(resData == "NNNNN"){
+            							$("#idCheck_result").removeClass("uncheck usable")
+            																	.addClass("unusable")
+            																	.text("중복된 아이디가 존재합니다. 다시 입력해주세요.");
+            							idResult = false;
+            						}
+            					}
+            				})
+            			}
+            			
+            			validate();
+            			
+            		}) // id check end
             		
             		// 비밀번호 유효성검사
             		$("#signup_form #userPwd").on("keyup", function(){
@@ -138,19 +163,27 @@
             		// 비밀번호확인 유효성검사
             		$("#signup_form #checkPwd").on("keyup", function(){
             			
-            			let regExp = new RegExp($("#signup_form #userPwd").val());
+            			let regExp = new RegExp("^" + $("#signup_form #userPwd").val() + "$");
             			
             			pwdEqualResult =  pwdResult && noValueCheck( $(this), $("#pwdEqualCheck_result") )
 									            								&& regExpCheck( $(this), $("#pwdEqualCheck_result")
 									            																			 , regExp, '비밀번호가 일치합니다.'
 									            																						   , '비밀번호가 일치하지 않습니다.')
-									            			
-            		})
+									validate();            			
+            		
+            		}) // pwd equal check end
             		
             		// 이름 유효성검사
             		$("#signup_form #userName").on("keyup", function(){
+            			let regExp = /^[가-힣]{2,5}$/;
             			
-            		})
+            			nameResult = noValueCheck( $(this), $("#nameCheck_result") )
+            												&& regExpCheck( $(this), $("#nameCheck_result")
+            																			 				 , regExp , "사용가능한 이름입니다."
+            																			 				 				  , "한글 2~5글자로 작성해주세요.");
+            			validate();
+            			
+            		}) // name check end
             		
             	})
             	

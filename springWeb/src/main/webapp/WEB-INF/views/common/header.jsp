@@ -16,6 +16,15 @@ header a{color:black;}
 header .profile-img{width:30px;}
 </style>
 
+<script>
+	if('${alertMsg}' != ''){
+		alert('${alertMsg}');
+		if('${historyBackYN}' == 'Y'){
+			history.back();
+		}
+	}
+</script>
+
 <header class="row m-3">
 	<div class="col-3 d-flex justify-content-center align-items-center">
 	    <a href=""><img src="${ contextPath }/resources/images/goodee_logo.png" width="100px"></a>

@@ -97,12 +97,63 @@
             			$result.removeClass("usable unusable")
             						 .addClass("uncheck")
             						 .text(""); // uncheck활성화 (결과 영역 출력 숨기기)
-            			return false;
+            			return false; // 유효성 검사를 진행할 필요가 없기 때문에 false 반환 
             		}
-            		return true;
+            		return true;    // 유효성 검사를 진행하도록 true 반환
             	}
             	
+            	// input요소에 작성된 값이 정규식(유효한패턴)에 만족하는지 체크해주는 함수
+            	function regExpCheck($input, $result, regExp, msg1, msg2){
+            		if(regExp.test($input.val())){ // 유효한값으로 잘 입력됐을 경우
+            			$result.removeClass("uncheck unusable")
+            					   .addClass("usable")
+            					   .text(msg1);
+            			return true;
+            		}else{ // 유효하지 않은 값으로 입력됐을 경우
+            			$result.removeClass("uncheck usable")
+            						 .addClass("unusable")
+            						 .text(msg2);
+            		  return false;
+            		}
+            	}
             
+            	$(function(){
+            	
+            		// 아이디 유효성검사
+            		$("#signup_form #userId").on("keyup", function(){
+            			
+            		})
+            		
+            		// 비밀번호 유효성검사
+            		$("#signup_form #userPwd").on("keyup", function(){
+            			let regExp = /^[a-z\d!@#$%^&*]{8,15}$/i;
+            			
+            			pwdResult = noValueCheck( $(this), $("#pwdCheck_result") )
+		            									&& regExpCheck( $(this), $("#pwdCheck_result")
+		            																				 , regExp, '사용가능한 비밀번호입니다.'
+		            																								 , '영문, 숫자, 특수문자 포함 8~15자리로 작성해주세요.' )
+		            	validate();			
+            		}) // pwd check end
+            		
+            		// 비밀번호확인 유효성검사
+            		$("#signup_form #checkPwd").on("keyup", function(){
+            			
+            			let regExp = new RegExp($("#signup_form #userPwd").val());
+            			
+            			pwdEqualResult =  pwdResult && noValueCheck( $(this), $("#pwdEqualCheck_result") )
+									            								&& regExpCheck( $(this), $("#pwdEqualCheck_result")
+									            																			 , regExp, '비밀번호가 일치합니다.'
+									            																						   , '비밀번호가 일치하지 않습니다.')
+									            			
+            		})
+            		
+            		// 이름 유효성검사
+            		$("#signup_form #userName").on("keyup", function(){
+            			
+            		})
+            		
+            	})
+            	
             </script>
           
           </div>

@@ -199,7 +199,25 @@ public class MemberController {
 		
 	}
 	
-	
+	@PostMapping("/resign.do")
+	public String resign(String userPwd
+				, HttpSession session
+				, RedirectAttributes rdAttributes) {
+		
+		MemberDto loginUser = (MemberDto)session.getAttribute("loginUser");
+		
+		if(bcryptPwdEncoder.matches(userPwd, loginUser.getUserPwd())) { // 비밀번호를 맞게 입력했을 경우
+			int result = memberService.deleteMember(loginUser.getUserId());
+			rdAttributes.addFlashAttribute("alertMsg", "성공적으로 탈퇴되었습니다. 그동안 이용해주셔서 감사합니다.");
+			session.invalidate();
+		}else { // 비밀번호가 틀렷을 경우
+			rdAttributes.addFlashAttribute("alertMsg", "비밀번호가 틀렸습니다. 다시 입력해주세요.");
+			rdAttributes.addFlashAttribute("historyBackYN", "Y");
+		}
+		
+		return "redirect:/";
+		
+	}
 	
 	
 	

@@ -1,7 +1,9 @@
 package com.br.spring.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,10 +15,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.br.spring.dto.MemberDto;
 import com.br.spring.service.MemberService;
+import com.br.spring.util.FileUtil;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +33,7 @@ public class MemberController {
 	
 	private final MemberService memberService;
 	private final BCryptPasswordEncoder bcryptPwdEncoder;
+	private final FileUtil fileUtil;
 	
 	@PostMapping("/signin.do")
 	public void signin(MemberDto m
@@ -37,6 +42,8 @@ public class MemberController {
 					 , HttpServletRequest request) throws IOException {
 		
 		MemberDto loginUser = memberService.selectMember(m);
+		// 암호화 전 : 아이디와 비번가지고 일치하는 회원 조회
+		// 암호화 후 : 아이디만을 가지고 일치하는 회원 조회(암호화된 비번담겨있음)
 		
 		// 로그인 성공시 => 세션에 회원정보 담고, alert와 함께 메인 페이지가 보여지도록
 		// 로그인 실패시 => alert와 함께 기존에 보던 페이지 유지
@@ -45,7 +52,7 @@ public class MemberController {
 		response.setContentType("text/html; charset=utf-8");
 		PrintWriter out = response.getWriter();
 		out.println("<script>");
-		if(loginUser != null) { // 로그인 성공
+		if(loginUser != null && bcryptPwdEncoder.matches(m.getUserPwd(), loginUser.getUserPwd())) { // 로그인 성공
 			session.setAttribute("loginUser", loginUser);
 			out.println("alert('" + loginUser.getUserName() + "님 환영합니다~');");
 			out.println("location.href = '" + request.getHeader("referer") + "';"); // 이전에 보던 페이지로 이동
@@ -133,6 +140,67 @@ public class MemberController {
 		
 		return "redirect:/";
 	}
+	
+	@GetMapping("/myinfo.do")
+	public void myinfoPage() {}
+	
+	@PostMapping("/update.do")
+	public String modify(MemberDto m
+					   , RedirectAttributes rdAttributes
+					   , HttpSession session) {
+		
+		int result = memberService.updateMember(m);
+		
+		if(result > 0) {
+			session.setAttribute("loginUser", memberService.selectMember(m));
+			rdAttributes.addFlashAttribute("alertMsg", "성공적으로 정보수정 되었습니다.");
+		}else {
+			rdAttributes.addFlashAttribute("alertMsg", "정보수정에 실패하였습니다.");
+		}
+		
+		
+		return "redirect:/member/myinfo.do";
+		
+	}
+	
+	@ResponseBody
+	@PostMapping("/updateProfile.do")
+	public String modifyProfile(MultipartFile uploadFile
+							  , HttpSession session) {
+		
+		// 현재 로그인한 회원정보 
+		MemberDto loginUser = (MemberDto)session.getAttribute("loginUser");
+		
+		// 현재 로그인한 회원의 기존 프로필 URL 
+		String originalProfileURL = loginUser.getProfileURL();
+		
+		// 변경요청한 프로필 파일 업로드
+		Map<String, String> map = fileUtil.fileupload(uploadFile, "profile");
+		
+		// 현재 로그인한 회원 객체에 profileURL 필드값을 새로운 프로필 이미지 경로로 수정
+		loginUser.setProfileURL( map.get("filePath") + "/" + map.get("filesystemName") );
+		
+		// db에 기록하기 위해 service 호출
+		int result = memberService.updateProfileImg(loginUser);
+		
+		if(result > 0) {
+			// 성공시 => 기존 프로필이 존재했을 경우 파일 삭제
+			if(originalProfileURL != null) {
+				new File(originalProfileURL).delete();
+			}
+			return "SUCCESS";
+		}else {
+			// 실패시 => 변경요청시 전달된 파일 삭제 
+			new File(loginUser.getProfileURL()).delete();
+			loginUser.setProfileURL(originalProfileURL); // 기존껄로 다시 변경
+			return "FAIL";
+		}
+		
+		
+	}
+	
+	
+	
 	
 	
 	

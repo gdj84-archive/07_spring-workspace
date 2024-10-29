@@ -42,7 +42,7 @@ header .profile-img{width:30px;}
 		    <!-- case2. 로그인후 -->
 		    <div>
 			    <img class="profile-img" src="${ contextPath }<c:out value='${ loginUser.profileURL }' default='/resources/images/defaultProfile.png' />">&nbsp;
-			    <a href="">${ loginUser.userName }님</a> &nbsp;|&nbsp;
+			    <a href="${ contextPath }/member/myinfo.do">${ loginUser.userName }님</a> &nbsp;|&nbsp;
 			    <a href="${ contextPath }/member/signout.do">로그아웃</a>
 		    </div>
 			</c:otherwise>

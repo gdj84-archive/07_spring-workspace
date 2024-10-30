@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.br.spring.dao.BoardDao;
+import com.br.spring.dto.AttachDto;
 import com.br.spring.dto.BoardDto;
 import com.br.spring.dto.PageInfoDto;
 import com.br.spring.dto.ReplyDto;
@@ -40,7 +41,18 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public int insertBoard(BoardDto b) {
-		return 0;
+		
+		int result = boardDao.insertBoard(b); 
+		
+		List<AttachDto> list = b.getAttachList();
+		if(result > 0 && !list.isEmpty()) {
+			result = 0;
+			for(AttachDto attach : list) {
+				result += boardDao.insertAttach(attach);
+			}
+		}
+		
+		return result;
 	}
 
 	@Override
@@ -50,7 +62,7 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public BoardDto selectBoard(int boardNo) {
-		return null;
+		return boardDao.selectBoard(boardNo);
 	}
 
 	@Override

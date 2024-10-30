@@ -7,6 +7,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.br.spring.dto.AttachDto;
 import com.br.spring.dto.BoardDto;
 import com.br.spring.dto.PageInfoDto;
 
@@ -34,6 +35,18 @@ public class BoardDao {
 	public List<BoardDto> selectSearchList(Map<String, String> search, PageInfoDto pi){
 		RowBounds rowBounds = new RowBounds((pi.getCurrentPage() - 1) * pi.getBoardLimit() , pi.getBoardLimit());
 		return sqlSession.selectList("boardMapper.selectSearchList", search, rowBounds);
+	}
+	
+	public int insertBoard(BoardDto b) {
+		return sqlSession.insert("boardMapper.insertBoard", b);
+	}
+	
+	public int insertAttach(AttachDto at) {
+		return sqlSession.insert("boardMapper.insertAttach", at);
+	}
+	
+	public BoardDto selectBoard(int boardNo) {
+		return sqlSession.selectOne("boardMapper.selectBoard", boardNo);
 	}
 	
 	

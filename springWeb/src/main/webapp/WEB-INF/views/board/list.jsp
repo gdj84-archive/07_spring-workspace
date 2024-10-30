@@ -27,9 +27,10 @@
             <h2 class="m-4">게시글 목록</h2>
             <br>
 
-            <!-- 로그인후 상태일 경우만 보여지는 글쓰기 버튼-->
-            <a class="btn btn-secondary" style="float:right" href="">글쓰기</a>
-            <br>
+            <c:if test="${ not empty loginUser }">
+	            <a class="btn btn-secondary" style="float:right" href="${ contextPath }/board/regist.do">글쓰기</a>
+	            <br>
+            </c:if>
             
             <br>
             <table id="boardList" class="table table-hover" align="center">
@@ -52,7 +53,7 @@
                 		</c:when>
                     <c:otherwise>
                     	<c:forEach var="b" items="${ list }">
-		                    <tr>
+		                    <tr onclick='location.href = "${contextPath}/board/detail.do?no=${ b.boardNo }";'>
 		                        <td>${ b.boardNo }</td>
 		                        <td>${ b.boardTitle }</td>
 		                        <td>${ b.boardWriter }</td>

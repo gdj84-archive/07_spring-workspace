@@ -30,12 +30,12 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public int selectSearchListCount(Map<String, String> search) {
-		return 0;
+		return boardDao.selectSearchListCount(search);
 	}
 
 	@Override
 	public List<BoardDto> selectSearchList(Map<String, String> search, PageInfoDto pi) {
-		return null;
+		return boardDao.selectSearchList(search, pi);
 	}
 
 	@Override

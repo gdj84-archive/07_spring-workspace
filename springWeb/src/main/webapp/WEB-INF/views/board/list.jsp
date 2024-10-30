@@ -10,24 +10,6 @@
 <style>
     #boardList th, #boardList td:not(:nth-child(2)){text-align: center;}
     #boardList>tbody>tr:hover{cursor:pointer;}
-
-    .page-link {
-        color: #6c757d; 
-        background-color: #fff;
-        border: 1px solid #ccc; 
-    }
-    .page-item.active .page-link {
-        z-index: 1;
-        color: #555;
-        font-weight:bold;
-        background-color: #f1f1f1;
-        border-color: #ccc;
-    }
-    .page-link:focus, .page-link:hover {
-        color: #000;
-        background-color: #fafafa; 
-        border-color: #ccc;
-    }
 </style>
 </head>
 <body>
@@ -103,16 +85,17 @@
            
             <br clear="both"><br>
             
-            <form action="" method="get" class="d-flex justify-content-center">
+            <form id="search_form" action="${ contextPath }/board/search.do" method="get" class="d-flex justify-content-center">
+                <input type="hidden" name="page" value="1">
                 <div class="select" >
                     <select class="custom-select" name="condition">
-                        <option value="">작성자</option>
-                        <option value="">제목</option>
-                        <option value="">내용</option>
+                        <option value="user_id">작성자</option>
+                        <option value="board_title">제목</option>
+                        <option value="board_content">내용</option>
                     </select>
                 </div>
                 <div class="text">
-                    <input type="text" class="form-control" name="">
+                    <input type="text" class="form-control" name="keyword">
                 </div>
                 <button type="submit" class="search_btn btn btn-secondary">검색</button>
             </form>

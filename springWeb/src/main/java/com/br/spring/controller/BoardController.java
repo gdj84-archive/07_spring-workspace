@@ -1,6 +1,7 @@
 package com.br.spring.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -41,7 +42,21 @@ public class BoardController {
 		
 	}
 	
-	
+	@GetMapping("/search.do")
+	public String search(@RequestParam(value="page", defaultValue="1") int currentPage
+					   , @RequestParam Map<String, String> search
+					   , Model model) {
+		// Map<String,String> search ==> {condition=user_id|board_title|board_content, keyword=란}
+		
+		int listCount = boardService.selectSearchListCount(search);
+		PageInfoDto pi = pagingUtil.getPageInfoDto(listCount, currentPage, 5, 5);
+		List<BoardDto> list = boardService.selectSearchList(search, pi);
+		
+		model.addAttribute("pi", pi);
+		model.addAttribute("list", list);
+		
+		return "board/list";
+	}
 	
 	
 	

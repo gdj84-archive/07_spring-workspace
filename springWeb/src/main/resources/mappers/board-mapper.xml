@@ -40,9 +40,9 @@
 	<select id="selectSearchListCount" resultType="_int">
 		select 
 					 count(*)
-			from board
+			from board b
 			join member on (user_no = board_writer)
-		 where status = 'Y'
+		 where b.status = 'Y'
 		   and ${condition} like '%' || #{keyword} || '%'
 	</select>
 

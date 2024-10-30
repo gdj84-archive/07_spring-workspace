@@ -1,5 +1,6 @@
 package com.br.spring.controller;
 
+
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +16,9 @@ import com.br.spring.service.BoardService;
 import com.br.spring.util.PagingUtil;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequestMapping("/board")
 @RequiredArgsConstructor
 @Controller
@@ -54,6 +57,8 @@ public class BoardController {
 		
 		model.addAttribute("pi", pi);
 		model.addAttribute("list", list);
+		model.addAttribute("search", search);
+		
 		
 		return "board/list";
 	}

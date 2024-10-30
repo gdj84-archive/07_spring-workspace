@@ -67,14 +67,16 @@
             </table>
             <br>
 
-            <ul class="pagination d-flex justify-content-center">
+            <ul id="paging_area" class="pagination d-flex justify-content-center">
             
               <li class="page-item ${ pi.currentPage == 1 ? 'disabled' : '' }">
               	<a class="page-link" href="${ contextPath }/board/list.do?page=${pi.currentPage-1}">Previous</a>
               </li>
               
               <c:forEach var="p" begin="${ pi.startPage }" end="${ pi.endPage }">
-              	<li class="page-item ${ pi.currentPage == p ? 'active' : '' }"><a class="page-link" href="${ contextPath }/board/list.do?page=${p}">${ p }</a></li>
+              	<li class="page-item ${ pi.currentPage == p ? 'active' : '' }">
+              		<a class="page-link" href="${ contextPath }/board/list.do?page=${p}">${ p }</a>
+              	</li>
               </c:forEach>
               
               <li class="page-item ${ pi.currentPage == pi.maxPage ? 'disabled' : '' }">
@@ -95,10 +97,35 @@
                     </select>
                 </div>
                 <div class="text">
-                    <input type="text" class="form-control" name="keyword">
+                    <input type="text" class="form-control" name="keyword" value="${ search.keyword }">
                 </div>
                 <button type="submit" class="search_btn btn btn-secondary">검색</button>
             </form>
+            <c:if test="${ not empty search }">
+	            <script>
+	            	$(document).ready(function(){
+	            		$("#search_form select").val('${search.condition}');
+	            		
+	            		// 검색후의 페이징바 클릭시 검색 form 을 강제로 submit 
+	            		// (단, 페이지번호는 현재 클릭한 페이지번호로 바꿔서)
+	            		$("#paging_area a").on("click", function(){
+	            			
+	            			let page = $(this).text(); // Previous | Next | 페이지번호
+	            			if(page == 'Previous'){
+	            				page = ${pi.currentPage - 1};
+	            			}else if(page == 'Next'){
+	            				page = ${pi.currentPage + 1};
+	            			}
+	            			
+	            			$("#search_form input[name=page]").val(page);
+	            			$("#search_form").submit();
+	            			
+	            			return false; // 기본이벤트(href='/board/list.do' url요청)가 동작 안되도록
+	            			
+	            		})
+	            	})
+	            </script>
+            </c:if>
           
           </div>
     

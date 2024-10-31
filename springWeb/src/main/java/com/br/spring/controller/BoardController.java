@@ -2,6 +2,7 @@ package com.br.spring.controller;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -20,6 +22,7 @@ import com.br.spring.dto.AttachDto;
 import com.br.spring.dto.BoardDto;
 import com.br.spring.dto.MemberDto;
 import com.br.spring.dto.PageInfoDto;
+import com.br.spring.dto.ReplyDto;
 import com.br.spring.service.BoardService;
 import com.br.spring.util.FileUtil;
 import com.br.spring.util.PagingUtil;
@@ -114,7 +117,13 @@ public class BoardController {
 		
 	}
 	
-	@GetMapping("/detail.do")
+	@GetMapping("/increase.do") // 조회수 증가용 (타인의 글일 경우 호출) => /board/detail.do 재요청
+	public String increaseCount(int no) {
+		boardService.updateIncreaseCount(no);
+		return "redirect:/board/detail.do?no=" + no;
+	}
+	
+	@GetMapping("/detail.do") // 게시글 상세조회용  (내글일 경우 이걸로 바로 호출)
 	public void detail(int no, Model model) {
 		// 상세페이지에 필요한 데이터
 		// 게시글(제목,작성자,작성일,내용) 데이터, 첨부파일(원본명,저장경로,실제파일명)들 데이터
@@ -124,6 +133,72 @@ public class BoardController {
 		model.addAttribute("b", b);
 		
 	}
+	
+	@ResponseBody
+	@GetMapping(value="/rlist.do", produces="application/json")
+	public List<ReplyDto> replyList(int no) {
+		return boardService.selectReplyList(no);
+	}
+	
+	@ResponseBody
+	@PostMapping("/rinsert.do")
+	public String replyInsert(ReplyDto r, HttpSession session) {
+		r.setReplyWriter( String.valueOf( ((MemberDto)session.getAttribute("loginUser")).getUserNo() ) );
+		int result = boardService.insertReply(r);
+		return result > 0 ? "SUCCESS" : "FAIL";
+	}
+	
+	@PostMapping("/delete.do")
+	public String remove(int no, RedirectAttributes rdAttributes) {
+		int result = boardService.deleteBoard(no);
+		
+		if(result > 0) {
+			rdAttributes.addFlashAttribute("alertMsg", "성공적으로 삭제되었습니다.");
+		}else {
+			rdAttributes.addFlashAttribute("alertMsg", "게시글 삭제에 실패하였습니다.");
+		}
+		
+		return "redirect:/board/list.do";
+	}
+	
+	@PostMapping("/modify.do")
+	public void modifyPage(int no, Model model) {
+		model.addAttribute("b", boardService.selectBoard(no));
+	}
+	
+	@PostMapping("/update.do")
+	public void modify(BoardDto board 		// 번호,제목,내용
+					 , String[] delFileNo   // null | 삭제할첨부파일번호들
+					 , List<MultipartFile> uploadFiles // 새로넘어온첨부파일들
+					 ) {
+		
+		// 후에 db에 반영 성공시 삭제할 파일들 삭제 위해 미리 조회
+		List<AttachDto> delAttachList = boardService.selectDelAttach(delFileNo);
+		
+		List<AttachDto> attachList = new ArrayList<>();
+		for(MultipartFile file : uploadFiles) {
+			if(file != null && !file.isEmpty()) {
+				Map<String, String> map = fileUtil.fileupload(file, "board");
+				attachList.add(AttachDto.builder()
+										.filePath(map.get("filePath"))
+										.originalName(map.get("originalName"))
+										.filesystemName(map.get("filesystemName"))
+										.refType("B")
+										.refNo(board.getBoardNo())
+										.build())	
+			}
+		}
+		
+		
+		// board테이블 update 무조건 진행 
+		
+		// 삭제할 첨부파일이 있었을 경우 => attachment테이블로부터 delete, 파일삭제
+		
+		// 새로넘어온 첨부파일이 있었을 경우 => 파일업로드, attachment 테이블로부터 insert
+		
+		
+	}
+	
 	
 	
 	

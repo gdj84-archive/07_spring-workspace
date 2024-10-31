@@ -133,7 +133,15 @@
 		  , #{filesystemName}
 		  , #{originalName}
 		  , #{refType}
-		  , seq_bno.currval
+		  <choose>
+		  	<when test="refNo == 0">
+		  		, seq_bno.currval
+		  	</when>
+		  	<otherwise>
+		  		, #{refNo}
+		  	</otherwise>
+		  </choose>
+		  
 		  )
 	</insert>
 	

@@ -1,8 +1,8 @@
 package com.br.spring.controller;
 
 
+import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -167,10 +167,10 @@ public class BoardController {
 	}
 	
 	@PostMapping("/update.do")
-	public void modify(BoardDto board 		// 번호,제목,내용
-					 , String[] delFileNo   // null | 삭제할첨부파일번호들
-					 , List<MultipartFile> uploadFiles // 새로넘어온첨부파일들
-					 ) {
+	public String modify(BoardDto board 		// 번호,제목,내용
+					   , String[] delFileNo   // null | 삭제할첨부파일번호들
+					   , List<MultipartFile> uploadFiles // 새로넘어온첨부파일들
+					   , RedirectAttributes rdAttributes ) {
 		
 		// 후에 db에 반영 성공시 삭제할 파일들 삭제 위해 미리 조회
 		List<AttachDto> delAttachList = boardService.selectDelAttach(delFileNo);
@@ -185,17 +185,23 @@ public class BoardController {
 										.filesystemName(map.get("filesystemName"))
 										.refType("B")
 										.refNo(board.getBoardNo())
-										.build())	
+										.build());	
 			}
 		}
+		board.setAttachList(attachList);
 		
+		int result = boardService.updateBoard(board, delFileNo);
 		
-		// board테이블 update 무조건 진행 
+		if(result > 0) { // 성공
+			rdAttributes.addFlashAttribute("alertMsg", "성공적으로 수정되었습니다.");
+			for(AttachDto at : delAttachList) {
+				new File(at.getFilePath() + "/" + at.getFilesystemName()).delete();
+			}
+		}else { // 실패
+			rdAttributes.addFlashAttribute("alertMsg", "게시글 수정에 실패했습니다.");
+		}
 		
-		// 삭제할 첨부파일이 있었을 경우 => attachment테이블로부터 delete, 파일삭제
-		
-		// 새로넘어온 첨부파일이 있었을 경우 => 파일업로드, attachment 테이블로부터 insert
-		
+		return "redirect:/board/detail.do?no=" + board.getBoardNo();
 		
 	}
 	

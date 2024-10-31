@@ -103,15 +103,19 @@ public class BoardServiceImpl implements BoardService {
 		List<AttachDto> list = b.getAttachList();
 		int result3 = 0;
 		for(AttachDto at : list) {
-			
+			result3 += boardDao.insertAttach(at);
 		}
 		
 		
 		// 성공에 대한 조건
 		// result1이 1이여야됨
 		// result2가 0보다 커야됨
+		// result3가 list의 사이즈와 동일
 		
-		return 0;
+		return result1 == 1
+					&& result2 > 0
+						&& result3 == list.size()
+							? 1 : -1;
 		
 		
 		

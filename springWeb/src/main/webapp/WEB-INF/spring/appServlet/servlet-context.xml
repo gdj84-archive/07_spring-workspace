@@ -36,8 +36,19 @@
 		<websocket:sockjs />
 	</websocket:handlers>
 	
-	
-	
+	<!-- interceptor 관련 등록 구문 -->
+	<interceptors>
+		<interceptor>
+			<mapping path="/member/myinfo.do" />
+			<mapping path="/board/regist.do" />
+			<beans:bean class="com.br.spring.interceptor.LoginCheckInterceptor" id="loginCheckInterceptor"/>
+		</interceptor>
+		<!--  
+		<interceptor>
+		
+		</interceptor>
+		-->
+	</interceptors>
 	
 	
 	

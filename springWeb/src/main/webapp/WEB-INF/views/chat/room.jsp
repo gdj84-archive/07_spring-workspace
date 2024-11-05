@@ -66,7 +66,6 @@
             <button type="button" class="btn btn-sm btn-secondary btn-block" onclick="sendMessage();">전송하기</button>
             <button type="button" class="btn btn-sm btn-danger btn-block" onclick="onClose();">퇴장하기</button>
             
-            
           </div>	
           
         </div>
@@ -95,15 +94,6 @@
       		
       		let msgArr = evt.data.split("|"); // ["메세지유형(chat|entry|exit)", "출력시킬메세지내용", "발신자아이디"];
       		
-      		/*
-      			<div class="chat-user entry">
-              xxx님이 들어왔습니다.
-            </div>
-            
-            <div class="chat-user exit">
-              xxx님이 나갔습니다.
-            </div>	
-      		*/
       		
       		let $chatDiv = $("<div>"); // 채팅창에 append시킬 요소 (메세지 유형별로 다르게 제작)
       		if(msgArr[0] == "chat"){ // 채팅메세지일 경우

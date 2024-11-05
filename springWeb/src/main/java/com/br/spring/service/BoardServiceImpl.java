@@ -118,8 +118,11 @@ public class BoardServiceImpl implements BoardService {
 							? 1 : -1;
 		
 		
-		
-		
+	}
+
+	@Override
+	public int deleteReplyCompletely() {
+		return boardDao.deleteReplyCompletely();
 	}
 	
 }

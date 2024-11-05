@@ -1,6 +1,19 @@
 package com.br.spring.scheduler;
 
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+import com.br.spring.service.BoardService;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@RequiredArgsConstructor
+@Component
 public class BoardScheduler {
+	
+	private final BoardService boardService;
 	
 	/*
 	 * * Scheduler
@@ -50,6 +63,33 @@ public class BoardScheduler {
 	 * 
 	 */
 	
+	@Scheduled(cron="0 8 11 * * *") // 매일 오전 11시 8분마다 실행
+	public void execute1() {
+		log.debug("매일 오전 11시 8분마다 실행됨");
+	}
 	
-
+	@Scheduled(cron="0 0/1 * * * *") // 1분마다 실행
+	public void execute2() {
+		log.debug("1분마다 매번 실행됨");
+	}
+	
+	@Scheduled(cron="0 0 0/1 * * *") // 1시간마다 실행
+	public void execute3() {
+		log.debug("1시간마다 매번 실행됨");
+	}
+	
+	// 통계 정보를 위해 매일 밤 12시에
+	// 현재 게시글의 총 갯수를 로그로 기록을 남기는 스케줄러가 필요하다고 가정
+	@Scheduled(cron="0 0 0 * * *") // 매일 밤 12시마다 실행
+	public void execute4() {
+		log.debug("현재 게시글의 총 갯수: {}", boardService.selectBoardListCount());
+	}
+	
+	// 일요일 새벽 1시마다 현재 status가 N인 댓글을 완벽히 delete 해주는 스케줄러가 필요하다고 가정
+	@Scheduled(cron="0 0 1 * * SUN")
+	public void execute5() {
+		int result = boardService.deleteReplyCompletely();
+		log.debug("현재 완전 삭제된 댓글 갯수: {}", result);
+	}
+	
 }

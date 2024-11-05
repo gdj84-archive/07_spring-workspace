@@ -41,5 +41,9 @@ public interface BoardService {
 	int insertReply(ReplyDto r);
 	
 	
+	// 댓글 완전삭제 (스케줄러에 의해 작동)
+	int deleteReplyCompletely();
+	
+	
 
 }
